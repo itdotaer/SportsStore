@@ -1,0 +1,11 @@
+﻿@model SportsStore.Domain.Entities.Cart
+           
+<div id="cart">
+    <span class="caption">
+        <b>Your cart:</b>
+        @Model.Lines.Sum(l => l.Quantity) item(s)
+        @Model.CoputeTotalValue().ToString("c")
+    </span>
+    
+    @Html.ActionLink("Checkout", "Index", "Cart", new{returnUrl = Request.Url.PathAndQuery})
+</div>

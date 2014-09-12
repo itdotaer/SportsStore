@@ -1,0 +1,52 @@
+﻿@model SportsStore.WebUI.Models.CartIndexViewModel
+
+@{
+    ViewBag.Title = "Sports Store: Your Cart";
+}
+
+<h2>Your cart</h2>
+<table width="90%" align="center">
+    <thead>
+        <tr>
+            <th align="center">Quantity</th>
+            <th align="left">Item</th>
+            <th align="right">Price</th>
+            <th align="right">Subtotal</th>
+            <th align="center">Operation</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var line in Model.Cart.Lines)
+        {
+            <tr>
+                <td align="center">@line.Quantity</td>
+                <td align="left">@line.Product.Name</td>
+                <td align="right">@line.Product.Price</td>
+                <td align="right">@(line.Product.Price * line.Quantity)</td>
+                @*<td align="center">
+                    <p class="actionButtons">
+                        @Html.ActionLink("Remove", "RemoveFromCart", new { ProductId = line.Product.ProductID, ReturnUrl = Model.ReturnUrl })
+                    </p>
+                </td>*@
+                <td align="center">
+                    @using (Html.BeginForm("RemoveFromCart", "Cart"))
+                    {
+                        @Html.Hidden("ProductId", line.Product.ProductID)
+                        @Html.HiddenFor(x => x.ReturnUrl)
+                        <input class="actionButtons" type="submit" value="Remove"/>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4" align="right">Total:</td>
+            <td align="right">@Model.Cart.CoputeTotalValue().ToString("c")</td>
+        </tr>
+    </tfoot>
+</table>
+<p align="center" class="actionButtons">
+    <a href="@Model.ReturnUrl">Continue Shopping</a>
+    @Html.ActionLink("Check Now", "Checkout")
+</p>
